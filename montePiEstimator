@@ -1,0 +1,46 @@
+#include <iostream>
+#include <random>
+#include <cmath>
+#include <fstream>
+#include <vector>
+#include <time.h>
+#include "histogram.h"
+
+double Monte_Pi(int N,std::mt19937_64 &gen){
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    long n_in = 0;
+    double n_tot =  1000;
+    for (int i = 0;i < n_tot;++i) {
+        double y = dist(gen);
+        double x = dist(gen);
+        double r = std::sqrt(x*x + y*y);
+        if (r <= 1.0) {n_in++;}
+  }
+return 4.0*n_in/n_tot;
+}
+
+int main() {
+    int n = 100;
+    int n_est = 1000;
+    std::vector<double> pies;
+    std::cout<<"Enter # of random points to estimate pi: ";
+    std::cin>> n;
+    std::cout<<"Enter # of times to estimate of pi: ";
+    std::cin>> n_est;
+    double pi_avg = 0.0;
+    std::mt19937_64 gen(time(0));
+    double Pi_est(int n);
+        for (int i = 0; i < n_est; ++i) {
+            pies.push_back(Monte_Pi(n,gen));
+            pi_avg += pies[i];
+            std::cout<<pies[i]<<"\n";
+        }
+        float sum = 0.0, strddev = 0.0;
+        for (int i = 0; i < n_est; ++i) {
+            sum += pow((pies[i]-(pi_avg/n_est)),2);
+        }
+        strddev = sqrt(sum/(n_est-1));
+    std::cout<<"Estimation of pi: "<< pi_avg/(double(n_est))<<"\n";
+    std::cout<<"Standard deviation: "<< sqrt(sum / (n_est-1));
+    return 0;
+}
